@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Industrial Products Catalogue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      padding: 20px; 
+      max-width: 720px; 
+      margin: auto; 
+      background: #f8f9fa;
+    }
+    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { color: #1a365d; text-align: center; margin-bottom: 10px; }
+    .success-msg { background: #c6f6d5; color: #22543d; padding: 15px; border-radius: 8px; border: 1px solid #9ae6b4; margin-bottom: 30px; text-align: center; }
+    .category { 
+      background: #f7fafc; border: 2px solid #e2e8f0; 
+      border-radius: 12px; padding: 24px; margin-bottom: 20px; 
+      transition: all 0.2s;
+    }
+    .category:hover { border-color: #007bff; box-shadow: 0 4px 12px rgba(0,123,255,0.15); }
+    .category h3 { color: #2d3748; margin: 0 0 12px 0; font-size: 20px; }
+    .category p { color: #4a5568; margin: 0 0 16px 0; }
+    .btn { 
+      display: inline-block; padding: 10px 20px; 
+      background: #28a745; color: white; text-decoration: none; 
+      border-radius: 6px; font-weight: 500; margin-right: 10px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #218838; }
+    .btn-whatsapp { background: #25D366; }
+    .btn-whatsapp:hover { background: #128C7E; }
+    .features { 
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 12px; margin-top: 16px;
+    }
+    .feature { background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #007bff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏭 Industrial Products Catalogue</h1>
+    <div class="success-msg">
+      ✅ Verified! You should receive our WhatsApp message shortly.
+    </div>
+
+    <div class="category">
+      <h3>🔗 Heavy Duty Conveyor Belts</h3>
+      <p>High-tensile strength belts for mining, cement plants, and steel mills. EP/NN grades available.</p>
+      <div class="features">
+        <div class="feature">Width: 500-2000mm</div>
+        <div class="feature">Ply: 3-8</div>
+        <div class="feature">Length: Custom</div>
+      </div>
+      <a href="/brochures/Conveyor_Belt_Catalog.pdf" download class="btn">📄 Download Brochure</a>
+      <a href="https://wa.me/91YOURBUSINESSNUMBER?text=Hi%2C%20I%27m%20interested%20in%20Conveyor%20Belts" class="btn btn-whatsapp" target="_blank">💬 WhatsApp Enquiry</a>
+    </div>
+
+    <div class="category">
+      <h3>⚙️ Precision Machine Parts</h3>
+      <p>CNC machined components for conveyors, crushers, and industrial machinery.</p>
+      <div class="features">
+        <div class="feature">Material: Steel, SS, Alloy</div>
+        <div class="feature">Tolerance: ±0.01mm</div>
+        <div class="feature">Custom Designs</div>
+      </div>
+      <a href="/brochures/Machine_Parts_Catalog.pdf" download class="btn">📄 Download Brochure</a>
+      <a href="https://wa.me/91YOURBUSINESSNUMBER?text=Hi%2C%20I%20need%20Machine%20Parts" class="btn btn-whatsapp" target="_blank">💬 WhatsApp Enquiry</a>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+      <p><strong>Need custom solutions?</strong> Reply to our WhatsApp message or scan another QR for specific products.</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:24px; font-size:14px; color:#4a5568;">
+  <a href="/privacy-policy">Privacy Policy</a> ·
+  <a href="/terms">Terms & Conditions</a>
+</div>
+
+</body>
+</html>

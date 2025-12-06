@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Industrial Products Catalogue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      padding: 20px; 
+      max-width: 480px; 
+      margin: auto; 
+      background: #f8f9fa;
+    }
+    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { color: #1a365d; text-align: center; margin-bottom: 10px; }
+    .subtitle { color: #4a5568; text-align: center; margin-bottom: 30px; }
+    input { 
+      width: 100%; padding: 14px; margin: 10px 0; 
+      border: 2px solid #e2e8f0; border-radius: 8px; 
+      font-size: 16px; transition: border-color 0.2s;
+    }
+    input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+    button { 
+      width: 100%; padding: 14px; margin: 10px 0; 
+      background: #007bff; color: white; border: none; 
+      border-radius: 8px; font-size: 16px; font-weight: 600; 
+      cursor: pointer; transition: background 0.2s;
+    }
+    button:hover:not(:disabled) { background: #0056b3; }
+    button:disabled { background: #a0aec0; cursor: not-allowed; }
+    .hidden { display: none !important; }
+    .message { padding: 12px; margin: 10px 0; border-radius: 8px; font-weight: 500; }
+    .success { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+    .error { background: #fed7d7; color: #742a2a; border: 1px solid #fc8181; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 Industrial Products</h1>
+    <p class="subtitle">Scan to get our Conveyor Belts & Machine Parts catalogue on WhatsApp</p>
+
+    <!-- Step 1: Collect details -->
+    <div id="step1">
+      <input type="text" id="name" placeholder="Your full name" />
+      <input type="tel" id="phone" placeholder="Phone (91XXXXXXXXXX)" />
+      <button id="sendOtpBtn">📱 Send OTP</button>
+      <div id="step1Msg"></div>
+    </div>
+
+    <!-- Step 2: Enter OTP -->
+    <div id="step2" class="hidden">
+      <p style="text-align: center; color: #4a5568;">Enter 6-digit OTP sent to your phone</p>
+      <input type="text" id="otp" placeholder="123456" maxlength="6" />
+      <button id="verifyOtpBtn">✅ Verify OTP</button>
+      <div id="step2Msg"></div>
+    </div>
+  </div>
+
+  <script>
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+    const step1Msg = document.getElementById('step1Msg');
+    const step2Msg = document.getElementById('step2Msg');
+    
+    let currentPhone = '';
+
+    // Send OTP
+    sendOtpBtn.addEventListener('click', async () => {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!name || !phone || phone.length < 10) {
+        showMsg(step1Msg, 'Please enter valid name and 10-digit phone number', 'error');
+        return;
+      }
+
+      sendOtpBtn.disabled = true;
+      sendOtpBtn.textContent = 'Sending...';
+      showMsg(step1Msg, 'Sending OTP to your phone...', 'success');
+
+      try {
+        const response = await fetch('/api/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, catalogCode: 'CATALOG_MAIN' })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          currentPhone = phone;
+          step1.classList.add('hidden');
+          step2.classList.remove('hidden');
+          showMsg(step2Msg, 'OTP sent! Check your messages.', 'success');
+        } else {
+          showMsg(step1Msg, data.message || 'Failed to send OTP', 'error');
+        }
+      } catch (error) {
+        showMsg(step1Msg, 'Network error. Please try again.', 'error');
+      } finally {
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = '📱 Send OTP';
+      }
+    });
+
+    // Verify OTP
+    verifyOtpBtn.addEventListener('click', async () => {
+      const otp = document.getElementById('otp').value.trim();
+
+      if (otp.length !== 6) {
+        showMsg(step2Msg, 'Please enter 6-digit OTP', 'error');
+        return;
+      }
+
+      verifyOtpBtn.disabled = true;
+      verifyOtpBtn.textContent = 'Verifying...';
+      showMsg(step2Msg, 'Verifying your OTP...', 'success');
+
+      try {
+        const response = await fetch('/api/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: currentPhone, otp })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          showMsg(step2Msg, '✅ Verified! Redirecting to catalogue...', 'success');
+          setTimeout(() => {
+            window.location.href = '/catalog';
+          }, 1500);
+        } else {
+          showMsg(step2Msg, data.message || 'Invalid OTP', 'error');
+        }
+      } catch (error) {
+        showMsg(step2Msg, 'Network error. Please try again.', 'error');
+      } finally {
+        verifyOtpBtn.disabled = false;
+        verifyOtpBtn.textContent = '✅ Verify OTP';
+      }
+    });
+
+    function showMsg(element, text, type) {
+      element.textContent = text;
+      element.className = `message ${type}`;
+    }
+  </script>
+
+  <div style="text-align:center; margin-top:24px; font-size:14px; color:#4a5568;">
+  <a href="/privacy-policy">Privacy Policy</a> ·
+  <a href="/terms">Terms & Conditions</a>
+</div>
+
+</body>
+</html>
